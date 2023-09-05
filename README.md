@@ -71,3 +71,12 @@ pip3 install threading
 2. Dimensions : 0.43m x 0.43m X 0.18m.
 3. Sensors : LiDAR, Inertial Measurement Unit, Wheel encoders.
 
+![Alt text](screenshots/cropped/rviz_model_tf2.jpg)
+
+<br>
+
+![Alt text](screenshots/cropped/odometry_lidar_simulation.jpg)
+
+<br>
+
+![Alt text](screenshots/cropped/LIDAR_Visualization.jpg)
