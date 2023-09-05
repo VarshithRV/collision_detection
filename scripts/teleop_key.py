@@ -59,10 +59,10 @@ def assign():
 def on(key:Key):
     key = str(key)
     # print(key)
-    if(key=="Key.esc"):
-        print("Exiting")
-        subprocess.run(["stty","echo"]) # password mode
-        sys.exit() # to the parent thread
+    # if(key=="Key.esc"):
+    #     print("Exiting")
+    #     subprocess.run(["stty","echo"]) # password mode
+    #     sys.exit() # to the parent thread
     if(key=="Key.up"):
         key_state["key_up"]=1
     if(key=="Key.down"):
