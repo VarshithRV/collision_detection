@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+    <include file="$(find jackal_gazebo)/launch/empty_world.launch">
+        <arg name="world_name"  value="$(find collision_detection)/worlds/obstacle.world"/>
+        <arg name="config" default="front_laser" />
+    </include>
+
+</launch>

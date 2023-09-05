@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+    <include file="$(find jackal_gazebo)/launch/jackal_world.launch">
+        <arg name="config" default="front_laser" />
+    </include>
+
+</launch>

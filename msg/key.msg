@@ -1,0 +1,16 @@
+int32 key_up
+int32 key_down
+int32 key_left
+int32 key_right
+int32 key_left_shift
+int32 key_left_ctrl
+int32 w
+int32 a
+int32 s
+int32 d
+int32 q
+int32 e
+int32 c
+int32 x
+int32 z
+int32 j
