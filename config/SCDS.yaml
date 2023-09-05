@@ -1,1 +1,6 @@
 tune : 0
+N_threads : 12 # must be a multiple of 6
+robot_size :
+  length : 0.43
+  width : 0.43
+robot_speed_multiplier : 2.0

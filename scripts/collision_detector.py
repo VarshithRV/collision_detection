@@ -1,4 +1,8 @@
-# to determine the nearest objects vector
+# collision_detection system entirely based on lidar data
+# the body field is a cylinder of radius r, centered at the base_link, Lidar is assumed to have be at the center
+# parameters used : tune -> to the linearly tune the effective radius of the body field
+
+
 import rospy
 import sys, threading
 from sensor_msgs.msg import LaserScan
@@ -22,14 +26,20 @@ def callback(data: LaserScan):
 if __name__=="__main__":
     rospy.init_node("lidar_msgs")
     rospy.loginfo("Initializing the collision_detection")
-    tune = float(sys.argv[1])
+    tune = rospy.get_param("tune")
+    # N = int(rospy.get_param("N_threads"))
+    N = 12
+    length = rospy.get_param("robot_size/length")
+    width = rospy.get_param("robot_size/width")
+
+    rospy.loginfo(f"tune parameter set to {tune} and Number of threads set to 12, robot size set to {length}x{width}")
 
     rospy.Subscriber("/front/scan", LaserScan, callback)
     rate = rospy.Rate(20)
     rospy.wait_for_message("/front/scan",LaserScan)
 
     # define body field over the lidar, if the distance is less than r, then collision is iminent
-    side = 0.42
+    side = max(length,width)
     r = (math.sqrt(2)*side)/2
     effective_radius = (1 + tune/100)*r
     rospy.loginfo(f"Effective radius set to {effective_radius}")
@@ -46,8 +56,8 @@ if __name__=="__main__":
     body_field.range_max = scan.range_max
     body_field.ranges = [effective_radius for i in range(len(scan.ranges))]
 
-    # create 12 threads
-    threads = [threading.Thread(target=ping_collision, args=(i,body_field)) for i in range(12)]
+    # Create N threads to check for collision in N sectors
+    threads = [threading.Thread(target=ping_collision, args=(i,body_field,)) for i in range(12)]
     for thread in threads:
         thread.start()
     
