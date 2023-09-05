@@ -28,13 +28,14 @@ rosrun collision_detection collision_dectetor.py
 ### Design and Future Scope
 
 1. Attempt 1: Only Using LiDAR Information, 2D lidar was used for getting distances of nearby objects, a virtual bounding cylinder (**Body field**) which encompasses the entire model was made, if distance of nearest object<**radius** of the cylinder, then **collision**. The Body field is represented using `sensor_msgs/LaserScan` message, which is an array of ranges. The Linear search for collision was achived via multithreading for improving efficiency. <br>
+
 Advantages :
-    1. Precise data from LiDAR in the range (0.1m,30m). 
+1. Precise data from LiDAR in the range (0.1m,30m). 
 
 Disadvantages : <br>
-    1. Large area of unoccupied space as cylinder shape is used as the Body field for a box.
-    2. Use case : when the rover slowly goes and touches an object, the detector will ping collision.
-    3. Relatively slow as it involves linear search.
+1. Large area of unoccupied space as cylinder shape is used as the Body field for a box.
+2. Use case : when the rover slowly goes and touches an object, the detector will ping collision.
+3. Relatively slow as it involves linear search.
 
 Future attempts will be based on IMU data by tracking drastic changes in individual components of Linear acceleration, Angular acceleration, angular velocity and orientation of the rover. This will like result in faster detection and will be able to measure and rank collisions to estimate the damage in real time situations.
 
