@@ -4,5 +4,6 @@
     <include file="$(find jackal_gazebo)/launch/jackal_world.launch">
         <arg name="config" default="front_laser" />
     </include>
-
+    <node pkg="collision_detection" type="teleop_key.py" name="keyboard_publisher" />
+    <node pkg="collision_detection" type="cmd_vel.py" name="velocity_publisher" />
 </launch>
