@@ -1,7 +1,7 @@
 # Collision Detection for UGV
 ## Intro 
 
-Attempting to create a robust collision detection system for ugv using LiDAR and odometry. <br>
+Attempting to create a robust collision detection system for ugv using LiDAR and IMU data. <br>
 UGV reference : [Jackal](https://docs.ros.org/en/noetic/api/jackal_tutorials/html/simulation.html)
 
 ## System
@@ -24,7 +24,7 @@ pip3 install pynput
 ## Architecture (Software)
 
 
-## The infamous Jackal
+## JACKAL Description
 
 #### INSSRT a pic of the environment and robot here
 

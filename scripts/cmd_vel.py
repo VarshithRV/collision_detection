@@ -19,7 +19,6 @@ if __name__=="__main__":
 
     while not rospy.is_shutdown():
         velocity.linear.x = key_values.w-key_values.s
-        velocity.linear.y = key_values.a-key_values.d
-        velocity.angular.z = key_values.key_left-key_values.key_right
+        velocity.angular.z = key_values.a-key_values.d
         pub_vel.publish(velocity)
         rate.sleep()
