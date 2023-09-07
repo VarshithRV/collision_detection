@@ -13,7 +13,7 @@ def keycb(data: key):
 if __name__=="__main__":
     rospy.init_node("keyboard_control")
     rospy.Subscriber("/keyboard", key, keycb)
-    multiplier = rospy.get_param("robot_speed_multiplier")
+    multiplier = rospy.get_param("/velocity_control/robot_speed_multiplier")
     rospy.loginfo(f"Robot speed multiplier set to {multiplier}")
     
     rate = rospy.Rate(20)

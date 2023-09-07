@@ -1,6 +1,9 @@
-tune : 0
-N_threads : 12 # must be a multiple of 6
+collision_detection :
+  tune : 5
+  sectors : 12
+  clearance : 0.02
 robot_size :
   length : 0.43
-  width : 0.43
-robot_speed_multiplier : 2.0
+  width : 0.40
+velocity_control : 
+  robot_speed_multiplier : 2.0

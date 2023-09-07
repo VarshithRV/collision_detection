@@ -10,7 +10,7 @@ import subprocess
 import sys
 import threading
 from collision_detection.msg import key
-# from px4_controller.msg import key
+import os
 from std_msgs.msg import String, Header
 
 key_values = key()
@@ -58,11 +58,10 @@ def assign():
 
 def on(key:Key):
     key = str(key)
-    # print(key)
-    # if(key=="Key.esc"):
-    #     print("Exiting")
-    #     subprocess.run(["stty","echo"]) # password mode
-    #     sys.exit() # to the parent thread
+    if(key=="Key.esc"):
+        print("Exiting")
+        subprocess.call(["stty","echo"])
+        os._exit(0)
     if(key=="Key.up"):
         key_state["key_up"]=1
     if(key=="Key.down"):
@@ -131,15 +130,17 @@ def off(key:Key):
     if(key=="'j'"):
         key_state["j"]=0
 
-rospy.init_node("Keypub")  
-pub=rospy.Publisher("/keyboard",key,queue_size=10)
-print("Enter the key here, use ctrl c to exit,press esc to exit")
-subprocess.run(["stty","-echo"])
-listener = Listener(on_press=on,on_release=off)
-listener.start()
-thread1=threading.Thread(target=assign)
-thread1.start()
-thread1.join()
-listener.join()
+
+if __name__=="__main__":
+    print("Enter the key here, use esc to exit")
+    subprocess.call(["stty","-echo"])
+    rospy.init_node("Keypub")
+    pub=rospy.Publisher("/keyboard",key,queue_size=10)
+    listener = Listener(on_press=on,on_release=off)
+    listener.start()
+    thread1=threading.Thread(target=assign)
+    thread1.start()
+    thread1.join()
+    listener.join()
 
 
