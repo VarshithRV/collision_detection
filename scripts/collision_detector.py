@@ -24,27 +24,23 @@ def callback(data: LaserScan):
     global scan
     scan = data
 
+# generate a box body_field for clearance
 def body_field_generator(length,width,clearance,start,end,step):
-    
-    # to generate an array of ranges representing a box of length + clearance, width + clearance
-    # start and end are the angles of the lidar
-    # step is the angle increment of the lidar
-
     ranges = list()
     rospy.loginfo(f"{length},{width},{clearance},{start},{end},{step}")
-    alpha = end
+    alpha = start
     theta = math.atan(width/length)
     X_intercept = length/2 + clearance
     Y_intercept = width/2 + clearance
     for i in range(0,720):
         if (alpha >= start and alpha <= -(math.pi - theta) )or (alpha >= (math.pi - theta) and alpha <= end):
-            y = -X_intercept/math.tan(alpha)
+            y = -X_intercept*math.tan(alpha)
             x = -X_intercept
         elif (alpha >= -(math.pi - theta) and alpha <= -theta):
             x = -Y_intercept/math.tan(alpha)
             y = -Y_intercept
         elif (alpha >= -theta and alpha <= theta):
-            y = X_intercept/math.tan(alpha)
+            y = X_intercept*math.tan(alpha)
             x = X_intercept
         elif (alpha >= theta and alpha <= (math.pi - theta)):
             x = Y_intercept/math.tan(alpha)
@@ -56,7 +52,11 @@ def body_field_generator(length,width,clearance,start,end,step):
     return ranges
 
 
-    # pass
+def publish_body_field(body_field:LaserScan):
+    pub_real_topic = rospy.Publisher("/body_field", LaserScan, queue_size=10)
+    while not rospy.is_shutdown():
+        pub_real_topic.publish(body_field)
+        rate.sleep()
 
 if __name__=="__main__":
 
@@ -87,8 +87,9 @@ if __name__=="__main__":
     effective_radius = (1 + tune/100)*r
     rospy.loginfo(f"Effective radius set to {effective_radius}")
 
+    rospy.loginfo("Generating body field")
     ### body declaration
-    # ##############################     CURRENTLY THE BODY FIELD IS A CYLINDER, TO BE REPLACED BY A BOX ###########
+    # body declaration is now a box of length + clearance, width + clearance
     # create LaserScan message as body field
     body_field = LaserScan()
     body_field.header.frame_id = "base_link"
@@ -99,14 +100,15 @@ if __name__=="__main__":
     body_field.range_max = scan.range_max
 
     body_field.ranges = body_field_generator(length, width, clearance, scan.angle_min, scan.angle_max, scan.angle_increment)
-    print(f"{len(body_field.ranges)}")
-    # ## body declaration to be changed to a box
-    # body_field.ranges = [effective_radius for i in range(len(scan.ranges))]
+    
+    # publish to the topic /body_field type LaserScan for visualization
+    body_publisher = threading.Thread(target = publish_body_field, args=(body_field,), daemon=True)
+    body_publisher.start()
 
-    # # Create N threads to check for collision in N sectors
-    # threads = [threading.Thread(target=ping_collision, args=(i,sectors,body_field,)) for i in range(12)]
-    # for thread in threads:
-    #     thread.start()
+    # Create N threads to check for collision in N sectors
+    threads = [threading.Thread(target=ping_collision, args=(i,sectors,body_field,)) for i in range(12)]
+    for thread in threads:
+        thread.start()
     
 
     
