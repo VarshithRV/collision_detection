@@ -15,7 +15,7 @@ roslaunch collision_detection rviz.launch
 ```
 
 2. For launching the simulation : 
-The rover can be controlled using keyboard, **W, A, S, D** keys.
+The rover can be controlled using keyboard, **W, A, S, D** keys. The collision detector will get automatically launch with this file.
 
 ```bash
 roslaunch collision_detection race_track.launch

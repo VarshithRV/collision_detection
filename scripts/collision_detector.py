@@ -13,11 +13,18 @@ scan=LaserScan()
 
 def ping_collision(i,sectors,body_field : LaserScan): # parse i*60 -> (i+1)*60
     n = int(720/sectors)
+    # frequency = 0
+    # start = rospy.Time.now()
     while not rospy.is_shutdown():
         for j in range(i*n,(i+1)*n):
             if scan.ranges[j] < body_field.ranges[j]:
                 rospy.logwarn(f"Collision detected in sector {i} with distance {scan.ranges[j]}")
                 break
+        # frequency += 1
+        # if rospy.Time.now() - start > rospy.Duration(1):
+        #     rospy.loginfo(f"Frequency of collision detection in sector {i} is {frequency}")
+        #     frequency = 0
+        #     start = rospy.Time.now()
 
 
 def callback(data: LaserScan):
